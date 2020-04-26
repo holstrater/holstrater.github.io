@@ -4,7 +4,7 @@ permalink: /programming/
 title: "Programming Posts by Tags"
 author_profile: true
 header:
-  image: "/images/terminalbanner.png"
+  image: "/images/banner2.png"
 ---
 
 {% include group-by-array collection=site.posts field="tags" %}
