@@ -2,6 +2,7 @@
 title: "About"
 permalink: /about/
 header:
+  image: "/images/terminalbanner.png"
 ---
 
 I like information security. A lot.

@@ -1,7 +1,7 @@
 ---
 layout: archive
-permalink: /programming/
-title: "Programming Posts by Tags"
+permalink: /monitoring/
+title: "Monitoring Posts by Tags"
 author_profile: true
 header:
   image: "/images/terminalbanner.png"
