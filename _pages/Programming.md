@@ -4,7 +4,6 @@ permalink: /programming/
 title: "Programming Posts by Tags"
 author_profile: true
 header:
-  image: ""
 ---
 
 {% include base_path %}
