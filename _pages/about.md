@@ -1,8 +1,6 @@
 ---
-layout: archive
-permalink: /about/
 title: "About"
-author_profile: false
+permalink: /about/
 header:
 ---
 
