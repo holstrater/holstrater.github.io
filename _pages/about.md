@@ -5,7 +5,6 @@ header:
   image: "/images/banner2.png"
 ---
 
-I like information security. A lot.
+I like information security.
 
-I will be using this website to keep track of what I've been working on.
-Feel free to bookmark for more to come!
+My goal for 2020 is to obtain the infamous OSCP certification, so most of what I post on this website is based on working towards that. Feel free to bookmark for more to come!
