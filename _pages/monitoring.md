@@ -1,7 +1,7 @@
 ---
 layout: archive
 permalink: /monitoring/
-title: "Monitoring Posts by Tags"
+title: "Monitoring Posts"
 author_profile: true
 header:
   image: "/images/banner2.png"
