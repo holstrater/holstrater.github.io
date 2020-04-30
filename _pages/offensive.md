@@ -7,6 +7,9 @@ header:
   image: "/images/banner2.png"
 ---
 
-# [Gaining access to Kioptrix 1 (VulnHub)](https://holstrater.github.io/kioptrix1/)
 
-# [Gaining access to Kioptrix 1.1 (VulnHub)](https://holstrater.github.io/kioptrix11/)
+
+  
+## [Gaining access to Kioptrix 1 (VulnHub)](https://holstrater.github.io/kioptrix1/)
+
+## [Gaining access to Kioptrix 1.1 (VulnHub)](https://holstrater.github.io/kioptrix11/)
