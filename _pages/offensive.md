@@ -1,18 +1,12 @@
 ---
 layout: archive
 permalink: /offensive/
-title: "Offensive Security Posts by Tags"
+title: "Offensive Security Posts"
 author_profile: true
 header:
   image: "/images/banner2.png"
 ---
 
-{% include group-by-array collection=site.posts field="tags" %}
+# [Gaining access to Kioptrix 1 (VulnHub)](https://holstrater.github.io/kioptrix1/)
 
-{% for tag in group_names %}
-  {% assign posts = group_items[forloop.index0] %}
-  <h2 id="{{ tag | slugify }}" class="archive__subtitle">{{ tag }}</h2>
-  {% for post in posts %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% endfor %}
+# [Gaining access to Kioptrix 1.1 (VulnHub)](https://holstrater.github.io/kioptrix11/)
