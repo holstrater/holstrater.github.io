@@ -157,11 +157,9 @@ This seemed like it could work as a password in the login form I found earlier. 
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_loggedin.png)
 
-Since this gave me access to some kind of file upload application, I decided to upload a reverse PHP shell and then run it by visiting it via whatever path it would be uploaded to. The file upload application seemed to be whitelisting file extensions, which didn't allow `.php` files to be uploaded. This just meant I had to rename the reverse PHP shell to something ending in `.png`. I set up a listener on my Kali machine and then uploaded and opened the file via `192.168.56.113/uploads/php-reverse-shell.php.png`:
+Since this gave me access to some kind of file upload application, I decided to upload a reverse PHP shell and then run it by visiting it via whatever path it would be uploaded to. The file upload application seemed to be whitelisting file extensions, which didn't allow `.php` files to be uploaded. This just meant I had to rename the reverse PHP shell to something ending in `.png`. I set up a listener on my Kali machine and then uploaded and opened the file via `192.168.56.113/uploads/php-reverse-shell.php.png`.
 
-![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_uploadfailed.png)
-
-Weird, after uploading it told me the upload was successful and should be found at `/uploads/`. Eventually I found out that on some websites, you can add `GIF89a;` to the header of your file to circumvent extra file checks being done. I did this and my listener finally caught a shell on the target's system:
+Strangely enough this didn't work, despite the message I got telling me the upload was successful and should be found at `/uploads/`. Eventually I found out that on some websites, you can add `GIF89a;` to the header of your file to circumvent extra file checks being done. I did this and my listener finally caught a shell on the target's system:
 
 ```sh
 kali@kali:~$ nc -nlvp 7777
@@ -275,9 +273,9 @@ cryptoResult=encodeString(sys.argv[1])
 print cryptoResult
 ```
 
-This was going somewhere. All I would have to do was reverse the encrypted password (`mVGZ3O3omkJLmy2pcuTq`) to the original plaintext password by following the steps of `cryptpass.py` in reverse order. This meant 1) using the ROT13 cipher on it (ROT13 forward does the same as ROT13 backwards), 2) spelling the result of that in reverse (that's what `[::-1]` does) and 3) running `base64 -d` on the result of that. The outcome: `LetThereBeFristi!`.
+This was going somewhere. All I would have to do was reverse the encrypted password (`=RFn0AKnlMHMPIzpyuTI0ITG`) to the original plaintext password by following the steps of `cryptpass.py` in reverse order. This meant 1) using the ROT13 cipher on it (ROT13 forward does the same as ROT13 backwards), 2) spelling the result of that in reverse (that's what `[::-1]` does) and 3) running `base64 -d` on the result of that. The outcome: `LetThereBeFristi!`.
 
-Because I remembered the `/home/fristigod` directory from earlier, I checked if i could `sudo fristigod` with that password and sure enough:
+Because I remembered the `/home/fristigod` directory from earlier (and the name of the .txt file being `whoisyourgodnow.txt`), I checked if i could `sudo fristigod` with that password and sure enough:
 
 ```sh
 sh-4.1$ su fristigod
