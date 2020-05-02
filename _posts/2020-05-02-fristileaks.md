@@ -23,7 +23,7 @@ Currently scanning: 192.168.69.0/16   |   Screen View: Unique Hosts
  192.168.56.113  08:00:27:a5:a6:76      1      60  PCS Systemtechnik GmbH                                                                                              
 ```
 
-I then ran an nmap scan against the target's IP address 192.168.56.113 to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. I saved the output in a file because don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
+I then ran an nmap scan against the target's IP address `192.168.56.113` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. I saved the output in a file because don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
 
 ```bash
 kali@kali:~$ sudo nmap -sS -A -n -oA fristileaks 192.168.56.113
@@ -53,7 +53,7 @@ HOP RTT     ADDRESS
 
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 21.89 seconds
-``.
+```
 
 This was definitely a web based challenge, so after not finding any useful exploits for the Apache version (as expected) I visited the target's website. Nothing interesting on the front page (or in its source), so I gave the three disallowed paths from the `nmap` output a try. Nothing there either, except 'hints' that these weren't the pages I'm looking for. I decided to run `dirb` in order to find other pages/paths that might be useful:
 
@@ -86,7 +86,7 @@ GENERATED WORDS: 4612
 -----------------
 END_TIME: Sat May  2 10:12:10 2020
 DOWNLOADED: 4612 - FOUND: 3
-``.
+```
 
 Nothing. Even `nikto` didn't report anything useful:
 
@@ -119,7 +119,7 @@ kali@kali:~$ nikto -h 192.168.56.113
 + End Time:           2020-05-02 10:13:24 (GMT-4) (15 seconds)
 ---------------------------------------------------------------------------
 + 1 host(s) tested
-``.
+```
 
 After a lot of thinking and staring at the output I had so far, I grew more and more convinced that there had to be a path that I was missing. After all, `dirb` only scans for paths based on the wordlist you give it. In this case, I used the default wordlist which returned no matches. I tried again with a few different wordlists, but still no success. The only conclusion I could come up with is that I'd have to manually try some pathnames based on the information the website was already giving me. As simple as things can be sometimes, `fristi` was what I was looking for:
 
@@ -146,7 +146,7 @@ F��n�T3W��ג���ߞ���j�                                  
 
 �o����͹tWK}�f�h�����}d� [��T5!Ռuɘ-��Ӈ������Ӌ,����C-GR��,����kj�\g}<���g.Ռuɘ-��V�_u��Z����#�|��_�A��Ӝ��'c�jƸdЖJ{<7
 ����9C}�f�P�4��p�]��O���I5c\2hK�G����t��b����#�*�       ��:�����R��J��jƺ$����#+o`���L*9�I:�����,��>��U騢"�3�jƼdȖ�ˆ#۞�����j��)'�zUq��F>L�Z���[Z4���LZ�R}�f�ˑ����S;���|�������f.-������h��FEZ�T_��>�sd�a6�(.�U^n|/�����ZZ��=�#;t����T_��>Trd��+?���8�7�j-�}d��R�t!�#�[/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E�����Z�8�rqIEND�B`�
-``.
+```
 
 Given that the notes from earlier mentioned how this way of encoding is used for images and the output above starts with `�PNG
 `, I `piped` the output to a new file which I gave the `png` extension. Opening that file showed the following:
@@ -175,7 +175,6 @@ sh: no job control in this shell
 sh-4.1$ whoami
 whoami
 apache
-sh-4.1$
 ```
 
 Looking around I found some `.txt` files with notes:
@@ -274,7 +273,7 @@ def encodeString(str):
 
 cryptoResult=encodeString(sys.argv[1])
 print cryptoResult
-``.
+```
 
 This was going somewhere. All I would have to do was reverse the encrypted password (`mVGZ3O3omkJLmy2pcuTq`) to the original plaintext password by following the steps of `cryptpass.py` in reverse order. This meant 1) using the ROT13 cipher on it (ROT13 forward does the same as ROT13 backwards), 2) spelling the result of that in reverse (that's what `[::-1]` does) and 3) running `base64 -d` on the result of that. The outcome: `LetThereBeFristi!`.
 
@@ -288,7 +287,7 @@ Password: LetThereBeFristi!
 bash-4.1$ whoami
 whoami
 fristigod
-``.
+```
 
 Still no root privileges, but at this point I had to be close. Turned out that I was:
 
