@@ -57,7 +57,7 @@ Nmap done: 1 IP address (1 host up) scanned in 21.89 seconds
 
 This was definitely a web based challenge, so after not finding any useful exploits for the Apache version (as expected) I visited the target's website. Nothing interesting on the front page (or in its source), so I gave the three disallowed paths from the `nmap` output a try. Nothing there either, except 'hints' that these weren't the pages I'm looking for. I decided to run `dirb` in order to find other pages/paths that might be useful:
 
-```
+```bash
 kali@kali:~$ dirb http://192.168.56.113
 
 -----------------
@@ -138,14 +138,14 @@ IHDRm4�A�sRGB���gAMA��
                                                            �z��l&�I%KH�@f45�5��VI
                                                                                  ���s��~���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/�����&������T3h��#3՗j�
                                                                                                                                                                  ��~�ݿ~��2�Z�e��L������ZZUW$�o��y���{K}�f�P����9{�6�X��KKL>����a�%�ZD�
-'��*�%&��Rxg�յ���V3]��#q�pz�R�\Zb�      -]�յ���JH5�9r(����I5se��G�tXq"k�6���j�����e׵�K����Z�t1n��               ���6��
+��*�%&��Rxg�յ���V3]��#q�pz�R�\Zb�      -]�յ���JH5�9r(����I5se��G�tXq"k�6���j�����e׵�K����Z�t1n��               ���6��
 F��n�T3W��ג���ߞ���j�                                                          �g=�Yx�i�bѢꍗj�ʒ�H-Y��ʯ��JH5Ӆx�D7(
                     ��ߠ�MI6�������D3�
                                      ������M���JH5ӅZ�l3�GY�d��M▒o6��T�rR�
                                                                          ��/�-��5ӅJ��I,�i9�l�Ѣ��Y��D���![
 
-�o����͹tWK}�f�h�����}d� [��T5!Ռuɘ-��Ӈ������Ӌ,����C-GR��,����kj�\g}<���g.Ռuɘ-��V�_u��Z����#�|��_�A��Ӝ��'c�jƸdЖJ{<7
-����9C}�f�P�4��p�]��O���I5c\2hK�G����t��b����#�*�       ��:�����R��J��jƺ$����#+o`���L*9�I:�����,��>��U騢"�3�jƼdȖ�ˆ#۞�����j��)'�zUq��F>L�Z���[Z4���LZ�R}�f�ˑ����S;���|�������f.-������h��FEZ�T_��>�sd�a6�(.�U^n|/�����ZZ��=�#;t����T_��>Trd��+?���8�7�j-�}d��R�t!�#�[/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E�����Z�8�rqIEND�B`�
+�o����͹tWK}�f�h�����}d� [��T5!Ռuɘ-��Ӈ������Ӌ,����C-GR��,����kj�\g}<���g.Ռuɘ-��V�_u��Z����#�|��_�A��Ӝ��c�jƸdЖJ{<7
+����9C}�f�P�4��p�]��O���I5c\2hK�G����t��b����#�*�       ��:�����R��J��jƺ$����#+o`���L*9�I:�����,��>��U騢"�3�jƼdȖ�ˆ#۞�����j��)�zUq��F>L�Z���[Z4���LZ�R}�f�ˑ����S;���|�������f.-������h��FEZ�T_��>�sd�a6�(.�U^n|/�����ZZ��=�#;t����T_��>Trd��+?���8�7�j-�}d��R�t!�#�[/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E�����Z�8�rqIEND�B`�
 ```
 
 Given that the notes from earlier mentioned how this way of encoding is used for images and the output above starts with `�PNG
@@ -209,7 +209,7 @@ however copy a few extra often needed commands to my
 homedir: chmod, df, cat, echo, ps, grep, egrep so you can use those
 from /home/admin/
 
-Don't forget to specify the full path for each binary!
+Do not forget to specify the full path for each binary!
 
 Just put a file called "runthis" in /tmp/, each line one command. The
 output goes to the file "cronresult" in /tmp/. It should
