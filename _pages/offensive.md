@@ -11,7 +11,12 @@ header:
 
 
 
+### [Gaining access to FristiLeaks (VulnHub)](https://holstrater.github.io/fristileaks/)
 
-### [Gaining access to Kioptrix 1 (VulnHub)](https://holstrater.github.io/kioptrix1/)
+### [Gaining access to Kioptrix 1.3 (VulnHub)](https://holstrater.github.io/kioptrix13/)
+
+### [Gaining access to Kioptrix 1.2 (VulnHub)](https://holstrater.github.io/kioptrix12/)
 
 ### [Gaining access to Kioptrix 1.1 (VulnHub)](https://holstrater.github.io/kioptrix11/)
+
+### [Gaining access to Kioptrix 1 (VulnHub)](https://holstrater.github.io/kioptrix1/)
