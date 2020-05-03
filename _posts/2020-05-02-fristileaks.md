@@ -1,6 +1,6 @@
 ---
 title: "Gaining access to FristiLeaks (VulnHub)"
-date: 2020-05-01
+date: 2020-05-02
 tags: [offensive security, vulnhub, gaining access]
 header:
   image: "/images/banner2.png"
