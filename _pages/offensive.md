@@ -11,6 +11,8 @@ header:
 
 
 
+### [Gaining access to Stapler (VulnHub)](https://holstrater.github.io/stapler/)
+
 ### [Gaining access to FristiLeaks (VulnHub)](https://holstrater.github.io/fristileaks/)
 
 ### [Gaining access to Kioptrix 1.3 (VulnHub)](https://holstrater.github.io/kioptrix13/)
