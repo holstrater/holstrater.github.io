@@ -23,7 +23,7 @@ _____________________________________________________________________________
 192.168.56.115  08:00:27:b2:5c:1d      1      60  PCS Systemtechnik GmbH  
 ```
 
-I then ran an nmap scan against the target's IP address 192.168.56.115 to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. However, since this way of scanning made me initially miss a crucial port during my latest writeup [Gaining access to Stapler (VulnHub)](https://holstrater.github.io/stapler/), I now added the `-p-` option. This checks all possible ports, not just the most common ones. I saved the output in a file because I don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
+I then ran an nmap scan against the target's IP address `192.168.56.115` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. However, since this way of scanning made me initially miss a crucial port during my latest writeup [Gaining access to Stapler (VulnHub)](https://holstrater.github.io/stapler/), I now added the `-p-` option. This checks all possible ports, not just the most common ones. I saved the output in a file because I don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
 
 ```bash
 kali@kali:~$ sudo nmap -p- -sS -A -n -oA pwnlab_init 192.168.56.115
@@ -54,7 +54,6 @@ PORT      STATE SERVICE VERSION
 |   Capabilities flags: 63487
 |   Some Capabilities: FoundRows, SupportsTransactions, Support41Auth, IgnoreSpaceBeforeParenthesis, Speaks41ProtocolOld, SupportsCompression, ODBCClient, IgnoreSigpipes, LongColumnFlag, InteractiveClient, SupportsLoadDataLocal, DontAllowDatabaseTableColumn, Speaks41ProtocolNew, LongPassword, ConnectWithDatabase, SupportsMultipleResults, SupportsMultipleStatments, SupportsAuthPlugins
 |   Status: Autocommit
-|   Salt: N-3YG:)]yl3U2:m7g&"v
 |_  Auth Plugin Name: mysql_native_password
 44963/tcp open  status  1 (RPC #100024)
 MAC Address: 08:00:27:B2:5C:1D (Oracle VirtualBox virtual NIC)
@@ -137,7 +136,7 @@ DOWNLOADED: 4612 - FOUND: 2
 
 I investigated the other services running on the target's machine, but since there were so few of them and since I didn't find anything there either, I grew more and more convinced that the website was my way in. In almost all of the similar challenges I've done so far, the ones that hosted websites usually did so for a reason. After all, there's simply so much attack surface on websites that it's not completely unlike real scenario's either.
 
-What stood out to me was the `?page=` parameter, which is always a possible candidate for Local File Inclusion (LFI) or command injection. Using an LFI cheatsheet that I saved a while ago, I started enumerating. After a while I finally found something - using LFI i could view the `config.php` file by using `php://filter` and `base64` encoding the output:
+What stood out to me was the `?page=` parameter, which is always a possible candidate for Local File Inclusion (LFI) or command injection. Using an LFI cheatsheet that I saved a while ago, I tried out a few options. After a while I finally found something - using LFI i could view the `config.php` file by using `php://filter` and `base64` encoding the output:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/pwnlabinit_url.png)
 
@@ -241,7 +240,7 @@ if (isset($_COOKIE['lang']))
 ?>
 ```
 
-It seemed like the `include()` function was vulnerable to LFI as well. A `lang` value stored in the `cookie` value could easily be manipulated with something like BurpSuite. I managed to open system files such as `/etc/passwd` while I was testing this:
+It seemed like this include() function was vulnerable to LFI as well. A `lang` value stored in the `cookie` value could easily be manipulated with something like BurpSuite. I managed to open system files such as `/etc/passwd` while I was testing this:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/pwnlabinit_passwd1.png)
 
@@ -260,12 +259,14 @@ Linux pwnlab 3.16.0-4-686-pae #1 SMP Debian 3.16.7-ckt20-1+deb8u4 (2016-02-29) i
  00:06:06 up  6:13,  0 users,  load average: 0.00, 0.01, 0.01
 USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
-/bin/sh: 0: can't access tty; job control turned off
+/bin/sh: 0: can not access tty; job control turned off
 $ whoami
 www-data
 ```
 
-I changed my shell to a more upgraded one and checked both `sudo -l` and the home directory on all of the accounts I obtained the credentials for earlier. `sudo` didn't work for any of them, and I couldn't even `su` to the `mike` user, which led me to suspect that `mike` was somehow important or related to my next steps. After all, at this point my privileges were still very limited which I needed to elevate to full ones in order to gain complete control of the target's system. I found something interesting in `kane`s home directory:
+I changed my shell to a more upgraded one and checked both `sudo -l` and the home directory on all of the accounts I obtained the credentials for earlier. `sudo` didn't work for any of them, and I couldn't even `su` to the `mike` user, which led me to suspect that `mike` was somehow important or related to my next steps. After all, at this point my privileges were still very limited which I needed to elevate to full ones in order to gain complete control of the target's system.
+
+I found something interesting in `kane`s home directory:
 
 ```sh
 $ python -c 'import pty; pty.spawn("/bin/sh")'
@@ -309,7 +310,7 @@ whoami
 mike
 ```
 
-Now that I had a shell for `mike`, I repeated the process of first checking my home directory. I found another similar file, `msg2root`. This file ran as root and seemed to echo my user input (it's very possible it did more but running `strings` on it crashed my vm...). If it handled my input as root, why not see if I could inject a second command to it? Turns out I could:
+Now that I had a shell for `mike`, I repeated the process of first checking my home directory. I found another similar file, `msg2root`. This file ran as `root` and seemed to echo my user input (it's very possible it did more but running `strings` on it crashed my VM...). If it handled my input as `root`, why not see if I could inject a second command to it? Turns out I could:
 
 ```sh
 mike@pwnlab:/home/mike$ ls
