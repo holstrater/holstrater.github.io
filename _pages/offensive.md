@@ -11,6 +11,8 @@ header:
 
 
 
+### [Gaining access to PwnLab: init (VulnHub)](https://holstrater.github.io/pwnlab_init/)
+
 ### [Gaining access to Stapler (VulnHub)](https://holstrater.github.io/stapler/)
 
 ### [Gaining access to FristiLeaks (VulnHub)](https://holstrater.github.io/fristileaks/)
