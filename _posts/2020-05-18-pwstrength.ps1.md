@@ -1,5 +1,5 @@
 ---
-title: "A password strength checker [PowerShell]"
+title: "A password strength checker (PowerShell)"
 date: 2020-05-18
 tags: [programming, powershell]
 header:
