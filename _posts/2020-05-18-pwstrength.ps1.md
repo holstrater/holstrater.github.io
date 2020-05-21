@@ -7,25 +7,29 @@ header:
   excerpt: "Programming, PowerShell"
 ---
 
-What led to writing this script, was the realization that my shell knowledge and experience was somewhat limited to Unix systems. Whenever I needed to quickly navigate through a Windows system through a shell, I noticed that the process was a lot more sluggish than I was used to on different operating systems. The Windows GUI is an exception to this as I've owned and used Windows for the majority of my life, but somehow I never really used the CLI as much as I do on Unix systems. Getting comfortable with PowerShell seemed like the perfect solution for this, so I wrote a script that checks the strength of either an existing or a potential password.
+What led to writing this script, was the realization that my shell knowledge and experience was somewhat limited to Unix systems. Whenever I needed to quickly navigate through a Windows shell, I noticed that the process was a lot more sluggish than I was used to on different operating systems. The Windows GUI is an exception to this as I've owned and used Windows for the majority of my life, but somehow I never really used the CLI as much as I do on Unix systems.
+
+Getting comfortable with PowerShell seemed like the perfect solution for this, so I wrote a script that checks the strength of a potential password.
 
 ## Create password variables
 
-I start off by checking if the user's device has a functioning connection to the internet. I do this by testing a connection to Google's nameservers over a small period of time. If this checks out, the user is prompted for the string that either represents his/her current password, or a potential (but not current) password. When the user enters the string, his/her input is censored and thus not shown on the screen. This is to help prevent credential theft. The string that the user enters is then manipulated in various ways, to make sure that the script actually knows what was entered and can analyze its strength as a password. Note that these variables are only stored inside this script - the script does not save these variables anywhere outside of its own local scope.
+I start off by checking if the user's device has a functioning connection to the internet. I do this using Google's nameservers, `8.8.8.8`. If this checks out, the user is prompted for the string that either represents his/her current password, or a potential (but not currently used) password. When the user enters the string, his/her input is censored and thus not shown on the screen. This is to help prevent credential theft. The string that the user enters is then manipulated in various ways to make sure that the script actually knows what was entered and can analyze its strength as a password.
+
+Note that these variables are only stored inside this script - the script does not save these variables anywhere outside of its own local scope.
 
 ## Check if password is commonly used by others
 
-I then `Invoke-WebRequest` to gather a list of the most commonly used passwords, in this case the top 10000 from 2017. I then *locally* check that list for a match with the string the user entered. Note that this way of string matching is done offline and locally *after* the contents of the online list are retrieved and parsed. This does not tell the website the list is hosted on to search for a particular string.
+I then use `Invoke-WebRequest` to gather a list of the most commonly used passwords, in this case the top 10000 from 2017. I then *locally* check that list for a match with the string the user entered. Note that this way of string matching is done offline and locally *after* the contents of the online list are retrieved and parsed. This does not tell the website the list is hosted on to search for a particular string.
 
-The part of the script where the URL to the online list of passwords is used, is probably one of the things that I'll tweak/update the most. For example: whenever I find a bigger, equally reliable but more recent list I'll probably replace the old list with that one. I'm also considering letting the script check multiple password lists as opposed to just one, but I'll have to see what exactly that does to the performance of the script.
+The part of the script where the URL to the online list of passwords is used, is probably what I'll tweak/update the most. For example: whenever I find a bigger, equally reliable but more recent list I'll probably replace the old list with that one. I'm also considering letting the script check multiple password lists as opposed to just one, but I'll have to see what exactly that does to the performance of the script.
 
-If a match is found between the user's input and the list, the program informs the user of this and exits. The reasoning behind this was that a common password isn't really worth performing further checks on.
+If a match is found between the user's input and the list, the program informs the user of this and exits. The reasoning behind this was that (in my opinion) a common password isn't really worth performing further checks on.
 
 ## Check if password already (partly) exists in plaintext on local device
 
 In this part, I first make sure that the user doesn't see any of the errors that potentially occur. I chose to do this because in all of the test runs I've done, there's always atleast one file that can't be accessed by the script due to permissions. In my opinion, the script doesn't need to check every single file, just the ones it has permission to. I make sure the way errors are displayed to the user is reset later on, so if any other (unintended) errors occur, those will show.
 
-What this part of the script does, is check if the string entered by the user already exists in a set of files on the user's device. Depending on the user's device this can take an extremely long time, so I made sure to only check files ending in `.txt`, `.odt`, `.docx` and `.doc`!!!. If a match is found, the script once again informs the user and exits. The reasoning from earlier behind exiting the script applies here as well.
+What this part of the script does, is check if the string entered by the user already exists in a set of files on the user's device. Depending on the user's device this can take an extremely long time, so I made sure to only check files ending in `.txt`, `.odt`, `.docx` and `.doc`. If a match is found, the script once again informs the user and exits. The earlier reasoning behind exiting the script applies here as well.
 
 I'd like to note that this particular check not only finds out if passwords can be found extremely easily by searching the user's device, but also if the password is an extremely weak, easy-to-guess one. For example, if my password is "arno", this script will find out. If my password is the city I live in, it will also find out. Anything that's stored in the text files mentioned earlier gets searched, making sure the password string can't easily be guessed because of its relation to the user.
 
@@ -35,17 +39,17 @@ This is where the script checks the length of the string entered by the user. I 
 
 ## Check special characters
 
-In here, I check which and how many special characters the potential password has. I compare that amount to the amount of total characters in the string so I can work with a percentage of special characters. If that percentage between a minimum and a maximum (0.1 and 0.9), the script allocates points to the password strength variable.
+In here, I check which and how many special characters the potential password has. I compare that amount to the amount of total characters in the string so I can work with a percentage of special characters. If that percentage is between a minimum and a maximum (0.1 and 0.9), the script allocates points to the password strength variable.
 
-In my opinion, checking for relative numbers is better than checking for absolute ones. A strong password should seem completely random, and a password that's 99% normal characters and 1% special characters doesn't seem random to me.
+In my opinion, checking for relative numbers is better than checking for absolute ones. A strong password should seem completely random and a password that's 99% normal characters and 1% special characters doesn't seem random to me.
 
 ## Check for upper- and lowercase combination
 
-This part checks for the combination of upper- and lowercase characters. It does the same thing the special character check does, and once again bases its point allocation on a percentage rather than an absolute number.
+This part checks for the combination of upper- and lowercase characters. It does the same thing the special character check does and once again bases its point allocation on a percentage rather than an absolute number.
 
 ## Check for numbers
 
-As the header says, this is where the script checks for numbers in the string entered by the user. Once again, it more or less does the same thing the previous couple of parts do. This is also the final part of the script, where the end result of the point allocations throughout the script are presented to the user. This is where the user find outs how his/her potential password scores on a scale of 0 to 100. As far as I know clearing the variables created throughout the script isn't necessary, but "for good measure" I manually clear them anyway.
+As the header indicates, this is where the script checks for numbers in the string entered by the user. Once again, it more or less does the same thing the previous parts do. This is also the final part of the script, where the end result of the point allocations throughout the script are presented to the user. This is where the user find outs how his/her potential password scores on a scale of 0 to 100. As far as I know clearing the variables created throughout the script isn't necessary, but "for good measure" I manually clear them anyway.
 
 ## Final words
 
