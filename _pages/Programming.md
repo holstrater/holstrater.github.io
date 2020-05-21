@@ -10,9 +10,8 @@ header:
 
 
 
-
-### [A password strength checker (PowerShell)](https://holstrater.github.io/dlp.sh/)
+### [A password strength checker (PowerShell)](https://holstrater.github.io/pwstrength.ps1/)
 
 ### [A reverse shell disguised as a hardware monitor (C)](https://holstrater.github.io/maccheck.c/)
 
-### [A keyword-based network monitor (Bash)](https://holstrater.github.io/pwstrength.ps1/)
+### [A keyword-based network monitor (Bash)](https://holstrater.github.io/dlp.sh/)
