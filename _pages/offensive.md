@@ -10,6 +10,8 @@ header:
 
 
 
+### [Gaining access to Vulnix (VulnHub)](https://holstrater.github.io/vulnix/)
+
 ### [Gaining access to Mr. Robot (VulnHub)](https://holstrater.github.io/mrrobot/)
 
 ### [Gaining access to Brainpan (VulnHub)](https://holstrater.github.io/brainpan/)
