@@ -53,7 +53,7 @@ As the header indicates, this is where the script checks for numbers in the stri
 
 ## Final words
 
-Creating this script was a lot of fun and similar to my experience with the first Bash program I posted on this website. PowerShell is definitely something I'll keep coming back to, so I'm pretty sure I'll be posting more PS scripts on this website in the future. As always, my main goal here was to learn so if you have any suggestions, questions or comments in general, please let me know. They're more than welcome.
+Creating this script was a lot of fun and similar to my experience with the first Bash program I posted on this website. PowerShell is definitely something I'll keep coming back to, so I'm pretty sure I'll be posting more PS scripts on this website in the future. As always, my main goal here was to learn so if you have any suggestions, questions or comments in general, let me know. They're more than welcome.
 
 ```powershell
 #Create password variables
