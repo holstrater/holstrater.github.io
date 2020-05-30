@@ -5,6 +5,8 @@ tags: [programming, powershell]
 header:
   image: "/images/banner2.png"
   excerpt: "Programming, PowerShell"
+layout: single
+classes: wide
 ---
 
 What led to writing this script, was the realization that my shell knowledge and experience was somewhat limited to Unix systems. Whenever I needed to quickly navigate through a Windows shell, I noticed that the process was a lot more sluggish than I was used to on different operating systems. The Windows GUI is an exception to this as I've owned and used Windows for the majority of my life, but somehow I never really used the CLI as much as I do on Unix systems.
