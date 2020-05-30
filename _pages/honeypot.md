@@ -1,12 +1,11 @@
 ---
 layout: archive
 permalink: /honeypot/
+title: "Using a honeypot to monitor unauthorized access"
 author_profile: true
 header:
   image: "/images/banner2.png"
 ---
-
-# Using a honeypot to monitor unauthorized access
 
 A honeypot is a computer (system) that's primarily meant to mirror common targets of cyberattacks. It can be designed to look and feel almost exactly like an actual production environment, luring in potential attackers. Attempts to gain unauthorized access to it are usually closely monitored and logged for further analysis. Post-access activity on the system can also be monitored and logged.
 
