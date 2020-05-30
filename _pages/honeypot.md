@@ -1,7 +1,6 @@
 ---
 layout: archive
 permalink: /honeypot/
-title: "Honeypot"
 author_profile: true
 header:
   image: "/images/banner2.png"
