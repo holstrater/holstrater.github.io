@@ -4,8 +4,8 @@ main:
     url: /programming/
   - title: "Offensive"
     url: /offensive/
-  - title: "Monitoring"
-    url: /monitoring/
+  - title: "Honeypot"
+    url: /honeypot/
   - title: "About"
     url: /about/
   # - title: "About"
