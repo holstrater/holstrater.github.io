@@ -9,7 +9,7 @@ layout: single
 classes: wide
 ---
 
-What led to writing this script, was the realization that my shell knowledge and experience was somewhat limited to Unix systems. Whenever I needed to quickly navigate through a Windows shell, I noticed that the process was a lot more sluggish than I was used to on different operating systems. The Windows GUI is an exception to this as I've owned and used Windows for the majority of my life, but somehow I never really used the CLI as much as I do on Unix systems.
+What led to writing this script, was the realization that my shell knowledge and experience was somewhat limited to Unix systems. Whenever I needed to quickly navigate through a Windows shell, I noticed that the process was a lot more sluggish than I was used to on different operating systems. The Windows GUI (as most of us know Windows) is an exception to this as I've owned and used Windows for the majority of my life, but somehow I never really used the CLI as much as I do on Unix systems.
 
 Getting comfortable with PowerShell seemed like the perfect solution for this, so I wrote a script that checks the strength of a potential password.
 
@@ -33,7 +33,7 @@ In this part, I first make sure that the user doesn't see any of the errors that
 
 What this part of the script does, is check if the string entered by the user already exists in a set of files on the user's device. Depending on the user's device this can take an extremely long time, so I made sure to only check files ending in `.txt`, `.odt`, `.docx` and `.doc`. If a match is found, the script once again informs the user and exits. The earlier reasoning behind exiting the script applies here as well.
 
-I'd like to note that this particular check not only finds out if passwords can be found extremely easily by searching the user's device, but also if the password is an extremely weak, easy-to-guess one. For example, if my password is "arno", this script will find out. If my password is the city I live in, it will also find out. Anything that's stored in the text files mentioned earlier gets searched, making sure the password string can't easily be guessed because of its relation to the user.
+I want to note that this particular check not only finds out if passwords can be found extremely easily by searching the user's device, but also if the password is an extremely weak, easy-to-guess one. For example, if my password is "arno", this script will find out. If my password is the city I live in, it will also find out. Anything that's stored in the text files mentioned earlier gets searched, making sure the password string can't easily be guessed because of its relation to the user.
 
 ## Check password length
 
@@ -51,7 +51,9 @@ This part checks for the combination of upper- and lowercase characters. It does
 
 ## Check for numbers
 
-As the header indicates, this is where the script checks for numbers in the string entered by the user. Once again, it more or less does the same thing the previous parts do. This is also the final part of the script, where the end result of the point allocations throughout the script are presented to the user. This is where the user find outs how his/her potential password scores on a scale of 0 to 100. As far as I know clearing the variables created throughout the script isn't necessary, but "for good measure" I manually clear them anyway.
+As the header indicates, this is where the script checks for numbers in the string entered by the user. Once again, it more or less does the same thing the previous parts do. This is also the final part of the script, where the end result of the point allocations throughout the script is presented to the user.
+
+This is where the user find outs how his/her potential password scores on a scale of 0 to 100. As far as I know clearing the variables created throughout the script isn't necessary, but for good measure I manually clear them anyway.
 
 ## Final words
 
