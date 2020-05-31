@@ -289,7 +289,7 @@ print cryptoResult
 
 This was going somewhere. All I would have to do was reverse the encrypted password (`=RFn0AKnlMHMPIzpyuTI0ITG`) to the original plaintext password by following the steps of `cryptpass.py` in reverse order. This meant 1) using the ROT13 cipher on it (ROT13 forward does the same as ROT13 backwards), 2) spelling the result of that in reverse (that's what `[::-1]` does) and 3) running `base64 -d` on the result of that. The outcome: `LetThereBeFristi!`.
 
-Because I remembered the `/home/fristigod` directory from earlier (and the name of the `.txt` file being `whoisyourgodnow.txt`), I checked if i could `sudo fristigod` with that password and sure enough:
+Because I remembered the `/home/fristigod` directory from earlier (and the name of the `.txt` file being `whoisyourgodnow.txt`), I checked if i could `su fristigod` with that password and sure enough:
 
 ```sh
 sh-4.1$ su fristigod
