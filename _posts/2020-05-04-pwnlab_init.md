@@ -9,7 +9,7 @@ layout: single
 classes: wide
 ---
 
-I started out by finding the IP address of the target's machine. This can be done with ``netdiscover``, which shows the IP address along with a MAC address. Since I already knew the MAC address (shown in VirtualBox), this could be easily matched with the right IP address. I used the `-r` option to scan for a limited range in which I know the IP address will be, which saves time.
+I started out by finding the IP address of the target's machine. This can be done with `netdiscover`, which shows the IP address along with a MAC address. Since I already knew the MAC address (shown in VirtualBox), this could be easily matched with the right IP address.
 
 ```bash
 kali@kali:~$ sudo netdiscover -r 192.168.56.0/16
@@ -25,7 +25,9 @@ _____________________________________________________________________________
 192.168.56.115  08:00:27:b2:5c:1d      1      60  PCS Systemtechnik GmbH  
 ```
 
-I then ran an nmap scan against the target's IP address `192.168.56.115` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. However, since this way of scanning made me initially miss a crucial port during my latest writeup [Gaining access to Stapler (VulnHub)](https://holstrater.github.io/stapler/), I now added the `-p-` option. This checks all possible ports, not just the most common ones. I saved the output in a file because I don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
+I then ran an `nmap` scan against the target's IP address `192.168.56.115` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose while remaining accurate. I saved the output to a file so I can go back to it later instead of having to do multiple scans (saving time).
+
+However, since this way of scanning made me initially miss a crucial port during [my previous writeup](https://holstrater.github.io/stapler/), I now also included the `-p-` option. This checks all possible ports, not just the most common ones.
 
 ```bash
 kali@kali:~$ sudo nmap -p- -sS -A -n -oA pwnlab_init 192.168.56.115
@@ -152,7 +154,7 @@ $database = "Users";
 ?>
 ```
 
-Looked like I had working MySQL credentials for the `root` user, from where I was able to find additional credentials:
+Looked like I had working `MySQL` credentials for the `root` user, from where I was able to find additional credentials:
 
 ```bash
 kali@kali:~$ mysql -u root -p -h 192.168.56.115
@@ -198,7 +200,7 @@ MySQL [Users]> select * from users;
 3 rows in set (0.001 sec)
 ```
 
-These new passwords seemed base64 encoded, so I decoded them:
+These new passwords seemed `base64` encoded, so I decoded them:
 
 ```bash
 kali@kali:~$ echo "Sld6WHVCSkpOeQ==" | base64 -d
@@ -209,7 +211,9 @@ kali@kali:~$ echo "aVN2NVltMkdSbw==" | base64 -d
 iSv5Ym2GRo
 ```
 
-I tried out the credentials of `kent` on the login form on the website, which worked and gave me access to a file uploading application. I remembered being able to view an empty `/upload/` path earlier, so if I uploaded a reverse PHP shell I hoped I was able to run it and give myself a shell on the target's machine. Unfortunately, this didn't work by simply opening the file via `/uploads/`. I had to open the file in some other way, so I looked around some more. Since I was able to use LFI to view `config.php`, I should also be able to view other files such as `index.php`, `login.php` and `upload.php`. I read the code of all three, but since I already managed to successfully upload a file and log in, my focus was on `index.php`. I came across this piece of PHP code:
+I tried out the credentials of `kent` on the login form on the website, which worked and gave me access to a file uploading application. I remembered being able to view an empty `/upload/` path earlier, so if I uploaded a reverse PHP shell I hoped I was able to run it and give myself a shell on the target's machine.
+
+Unfortunately, this didn't work by simply opening the file via `/uploads/`. I had to open the file in some other way, so I looked around some more. Since I was able to use LFI to view `config.php`, I should also be able to view other files such as `index.php`, `login.php` and `upload.php`. I read the code of all three, but since I already managed to successfully upload a file and log in, my focus was on `index.php`. I came across this piece of PHP code:
 
 ```php
 <?php
@@ -242,7 +246,7 @@ if (isset($_COOKIE['lang']))
 ?>
 ```
 
-It seemed like this include() function was vulnerable to LFI as well. A `lang` value stored in the `cookie` value could easily be manipulated with something like BurpSuite. I managed to open system files such as `/etc/passwd` while I was testing this:
+It seemed like this include() function was vulnerable to LFI as well. A `lang` value stored in the `cookie` value could easily be manipulated with something like `BurpSuite`. I managed to open system files such as `/etc/passwd` while I was testing this:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/pwnlabinit_passwd1.png)
 
@@ -266,7 +270,7 @@ $ whoami
 www-data
 ```
 
-I changed my shell to a more upgraded one and checked both `sudo -l` and the home directory on all of the accounts I obtained the credentials for earlier. `sudo` didn't work for any of them, and I couldn't even `su` to the `mike` user, which led me to suspect that `mike` was somehow important or related to my next steps. After all, at this point my privileges were still very limited which I needed to elevate to full ones in order to gain complete control of the target's system.
+I checked both `sudo -l` and the home directory on all of the accounts I obtained the credentials for earlier. `sudo` didn't work for any of them, and I couldn't even `su` to the `mike` user, which led me to suspect that `mike` was somehow important or related to my next steps. After all, at this point my privileges were still very limited which I needed to elevate to full ones in order to gain complete control of the target's system.
 
 I found something interesting in `kane`s home directory:
 
@@ -294,7 +298,7 @@ kane@pwnlab:~$ ./msgmike
 cat: /home/mike/msg.txt: No such file or directory
 ```
 
-Looked like I was right about the suspicion I had about the `mike` user. Looking closely at `cat: /home/mike/msg.txt: No such file or directory`, I figured out that `cat` was missing the full path to the `cat` binary. This meant I could create another file called `cat` and prioritize it by adding the path that new file resided in to my `$PATH`variable. This would result in my newly created `cat` file being executed instead of the `cat` binary that was originally intended to execute. The new `cat` file would be run as the `mike` user.
+Looked like I was right about the suspicion I had about the `mike` user. Looking closely at `cat: /home/mike/msg.txt: No such file or directory`, I figured out that `cat` was missing the full path to the `cat` binary. This meant I could create another file called `cat` and prioritize it by adding the path that new file resided in to my `$PATH` variable. This would result in my newly created `cat` file being executed instead of the `cat` binary that was originally intended to execute. The new `cat` file would be run as the `mike` user.
 
 This meant that I could do the following:
 
@@ -312,7 +316,7 @@ whoami
 mike
 ```
 
-Now that I had a shell for `mike`, I repeated the process of first checking my home directory. I found another similar file, `msg2root`. This file ran as `root` and seemed to echo my user input (it's very possible it did more but running `strings` on it crashed my VM...). If it handled my input as `root`, why not see if I could inject a second command to it? Turns out I could:
+Now that I had a shell as the `mike` user, I repeated the process of first checking my home directory. I found another similar file, `msg2root`. This file ran as `root` and seemed to echo my user input (it's very possible it did more but running `strings` on it crashed my VM...). If it handled my input as `root`, why not see if I could inject a second command to it? Turns out I could:
 
 ```sh
 mike@pwnlab:/home/mike$ ls
@@ -331,14 +335,6 @@ mike@pwnlab:/home/mike$ ./msg2root
 Message for root: test; /bin/bash
 test; /bin/bash
 test
-bash-4.3$ whoami
-whoami
-mike
-bash-4.3$ ./msg2root
-./msg2root
-Message for root: another test || /bin/bash
-another test || /bin/bash
-another test
 bash-4.3$ whoami
 whoami
 mike
@@ -364,4 +360,4 @@ root
 
 A significant number of ways into and through the target's system depended on local file inclusion and command injection exploits. It's absolutely crucial that user input is validated and sanitized sufficiently, this should not be neglected in writing or reviewing code.
 
-Another important factor in elevating my privileges on the target's machine was being able to find user credentials stored in the MySQL database. These passwords were stored as base64-encoded strings, which is better than storing as plaintext but still a lot more insecure than storing as encrypted strings. If strong encryption had been used (or if these passwords hadn't been stored there in the first place), I wouldn't have been able to log in as the `kane` and `kent` users from where I elevated my privileges even further.
+Another important factor in elevating my privileges on the target's machine was being able to find user credentials stored in the `MySQL` database. These passwords were stored as `base64`-encoded strings, which is better than storing as plaintext but still a lot more insecure than storing as encrypted strings or as strong hashes. If strong encryption or hashing had been used (or if these passwords hadn't been stored there in the first place), I wouldn't have been able to log in as the `kane` and `kent` users from where I elevated my privileges even further.
