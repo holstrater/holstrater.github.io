@@ -94,7 +94,7 @@ analytics:
 # Site Author
 author:
   name             : "Arno Holstrater"
-  avatar           : "/images/greytriangle.jpg"
+  avatar           : #"/images/avatarnamehere.extension"
   bio              : "Information Security enthusiast"
   location         : "Rotterdam, The Netherlands"
   email            : "arnohlstrtr@gmail.com"
