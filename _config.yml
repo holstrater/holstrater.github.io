@@ -16,7 +16,7 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "arno Holstrater"
+title                    : "Arno Holstrater"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Arno Holstrater"
@@ -93,9 +93,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "A. Holstrater"
-  avatar           : "/images/0-247_grey-triangle-png-grey-and-white-triangle-transparent"
-  bio              : "Information security enthusiast"
+  name             : "Arno Holstrater"
+  avatar           : "/images/greytriangle.jpg"
+  bio              : "Information Security enthusiast"
   location         : "Rotterdam, The Netherlands"
   email            : "arnohlstrtr@gmail.com"
   github           : "holstrater"
