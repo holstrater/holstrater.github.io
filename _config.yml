@@ -49,8 +49,8 @@ comments:
 reCaptcha:
   siteKey                :
   secret                 :
-atom_feed:
-  path                   : # blank (default) uses feed.xml
+#atom_feed:
+#  path                   : # blank (default) uses feed.xml
 search                   : # true, false (default)
 search_full_content      : # true, false (default)
 search_provider          : # lunr (default), algolia, google
@@ -99,6 +99,7 @@ author:
   location         : "Rotterdam, The Netherlands"
   email            : "arnohlstrtr@gmail.com"
   github           : "holstrater"
+  linkedin         : "arnoholstrater"
   #links:
   #
   #  - label: "Email"
